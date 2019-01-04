@@ -1,5 +1,6 @@
 package com.apfoods.filedownloader;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -82,10 +83,9 @@ public class FiledownloaderApplication {
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 		String suffix= sdf.format(timestamp);
 		String saveDirectory = tempDir;
-		String zipDirectory = ziDir+"\\payslips"+suffix+".zip";
+		String zipDirectory = ziDir +File.separator+"payslips"+suffix+".zip";
 
 		EmailAttachmentReceiver receiver = new EmailAttachmentReceiver();
-
 		receiver.deleteContentOfLocalDirectory(saveDirectory);
 		receiver.setSaveDirectory(saveDirectory);
 		receiver.downloadEmailAttachments(host, port, userName, password);

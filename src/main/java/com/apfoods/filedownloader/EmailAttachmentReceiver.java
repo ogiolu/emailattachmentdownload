@@ -153,9 +153,12 @@ public class EmailAttachmentReceiver {
 
         File srcDir = new File(folder);
         try {
+          if (srcDir.exists()){
+              FileUtils.cleanDirectory(srcDir);
+          }
 
-            FileUtils.cleanDirectory(srcDir);
         } catch (IOException e) {
+
             e.printStackTrace();
         }
 
