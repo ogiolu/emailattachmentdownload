@@ -145,7 +145,7 @@ public class EmailAttachmentReceiver {
                 System.out.println("Message #" + (i + 1) + ":");
                 System.out.println("\t Subject: " + subject);
                 System.out.println("\t Attachments: " + attachFiles);
-                message.setFlag(Flags.Flag.DELETED, false);
+                message.setFlag(Flags.Flag.DELETED, true);
             }
 
             // disconnect
