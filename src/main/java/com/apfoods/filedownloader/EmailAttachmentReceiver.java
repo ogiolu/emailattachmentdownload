@@ -1,12 +1,13 @@
 package com.apfoods.filedownloader;
 
 
-import com.jcraft.jsch.*;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.zeroturnaround.zip.ZipUtil;
 
-import java.util.Collection;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Properties;
 import java.io.File;
 import java.io.IOException;
@@ -15,8 +16,29 @@ import javax.mail.Session;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.search.FlagTerm;
 
+
 public class EmailAttachmentReceiver {
     private String saveDirectory;
+    @Value("${sftpusername}")
+    private String sftpusername="INT017";
+    @Value("${sftpassword}")
+    private String sftpassword="dh}hitca";
+    @Value("${sftphost}")
+    private String sftphost="sftp.biscuits.com";
+    @Value("${sftport}")
+    private int sftport=22;
+    @Value("${remotedirectory}")
+    private String remotedirectory="/files/Payslips/";
+    @Value("${host}")
+    private String host="mail.petcom.com.ng";
+    @Value("${port}")
+    private String port="995";
+    @Value("${emailuserName}")
+    private String emailuserName="apf-payslip@petcom.com.ng";
+    @Value("${password}")
+    private String password="1Development2@";
+
+
 
     /**
      * Sets the directory where attached files will be stored.
@@ -121,12 +143,8 @@ public class EmailAttachmentReceiver {
 
                 // print out details of each message
                 System.out.println("Message #" + (i + 1) + ":");
-                System.out.println("\t From: " + from);
                 System.out.println("\t Subject: " + subject);
-                System.out.println("\t Sent Date: " + sentDate);
-                System.out.println("\t Message: " + messageContent);
                 System.out.println("\t Attachments: " + attachFiles);
-
                 message.setFlag(Flags.Flag.DELETED, false);
             }
 
@@ -167,12 +185,8 @@ public class EmailAttachmentReceiver {
 
     public void zipFiles(String sourceFile,String zipFile) throws Exception{
         System.out.println("Inside zip file >>>>>>>>>>>");
-        if (new File(sourceFile).exists() &&  new File(zipFile).exists()) {
             ZipUtil.pack(new File(sourceFile), new File(zipFile));
-        }
-        else{
-            System.out.println("source or distination file for zipiing does not exists >>>>>>>>>>>");
-        }
+
 
     }
 
@@ -185,9 +199,42 @@ public class EmailAttachmentReceiver {
 
 
 
+     public void peformDownload() throws Exception {
+
+         final String tempDir = System.getProperty("java.io.tmpdir") + "attachment";
+         final String ziDir = System.getProperty("java.io.tmpdir") + "attachmentzip";
+         File f = new File(tempDir);
+
+       System.out.println(" sftpusername >>>>" +sftpusername);
+         if (!f.exists()) {
+             System.out.println("tempDir does not exist >>>>" + tempDir);
+             f.mkdir();
+         }
+         File z = new File(ziDir);
+         if (!z.exists()) {
+             System.out.println("ziDir does not exist >>>>>>" + ziDir);
+             z.mkdir();
+         }
+
+		System.out.println("host>>>>"+host);
+		System.out.println("port>>>>"+port);
+		System.out.println("userName>>>>"+emailuserName);
+		System.out.println("password>>>>"+password);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+		String suffix= sdf.format(timestamp);
+		String saveDirectory = tempDir;
+		System.out.println("saveDirectory>>>>"+saveDirectory);
+		String zipDirectory = ziDir +File.separator+"payslips"+suffix+".zip";
+		deleteContentOfLocalDirectory(saveDirectory);
+		setSaveDirectory(saveDirectory);
+		downloadEmailAttachments(host, port, emailuserName, password);
+		zipFiles(saveDirectory,zipDirectory);
+		uploadFileToSTFP(sftpusername,sftpassword,sftphost,Integer.valueOf(sftport),zipDirectory,remotedirectory);
+     }
 
 
+     }
 
 
-}
 

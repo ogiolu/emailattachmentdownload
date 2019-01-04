@@ -9,8 +9,7 @@ import org.zeroturnaround.zip.ZipUtil;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Vector;
+
 
 public class MigrateFles {
 
@@ -90,6 +89,10 @@ public class MigrateFles {
 
     public  boolean isRealFile(String filename) {
         return (!filename.equals("..") && !filename.equals("."));
+    }
+
+    public void test(){
+        System.out.println("Here to print");
     }
 
     public void zipFiles( String sourceFile,String zipFile){
