@@ -60,11 +60,15 @@ public class FiledownloaderApplication {
 		final String tempDir = System.getProperty("java.io.tmpdir")+"attachment";
 		final String ziDir = System.getProperty("java.io.tmpdir")+"attachmentzip";
 		File f = new File(tempDir);
-		if(!f.exists())
+		if(!f.exists()) {
+			System.out.println("tempDir does not exist" + tempDir);
 			f.mkdir();
+		}
 		File z = new File(ziDir);
-		if(!z.exists())
+		if(!z.exists()) {
+			System.out.println("ziDir does not exist" + ziDir);
 			z.mkdir();
+		}
 		String sftpusername=ctx.getEnvironment().getProperty("sftpusername");
 		String sftpassword=ctx.getEnvironment().getProperty("sftpassword");
 		String sftphost=ctx.getEnvironment().getProperty("sftphost");
@@ -83,6 +87,7 @@ public class FiledownloaderApplication {
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 		String suffix= sdf.format(timestamp);
 		String saveDirectory = tempDir;
+		System.out.println("saveDirectory>>>>"+saveDirectory);
 		String zipDirectory = ziDir +File.separator+"payslips"+suffix+".zip";
 
 		EmailAttachmentReceiver receiver = new EmailAttachmentReceiver();

@@ -167,7 +167,12 @@ public class EmailAttachmentReceiver {
 
     public void zipFiles(String sourceFile,String zipFile) throws Exception{
         System.out.println("Inside zip file >>>>>>>>>>>");
-        ZipUtil.pack(new File(sourceFile), new File(zipFile));
+        if (new File(sourceFile).exists() &&  new File(zipFile).exists()) {
+            ZipUtil.pack(new File(sourceFile), new File(zipFile));
+        }
+        else{
+            System.out.println("source or distination file for zipiing does not exists >>>>>>>>>>>");
+        }
 
     }
 
