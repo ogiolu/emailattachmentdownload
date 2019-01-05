@@ -2,7 +2,6 @@ package com.apfoods.filedownloader;
 
 
 import org.apache.commons.io.FileUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.zeroturnaround.zip.ZipUtil;
 
