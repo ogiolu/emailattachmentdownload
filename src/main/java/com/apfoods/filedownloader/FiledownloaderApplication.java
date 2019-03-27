@@ -20,6 +20,10 @@ public class FiledownloaderApplication {
 	public static void main(String[] args) throws Exception {
 	SpringApplication.run(FiledownloaderApplication.class, args);
 
+		EmailAttachmentReceiver mailAttachmentReceiver = new EmailAttachmentReceiver();
+
+		mailAttachmentReceiver.peformDownload();
+
 
 	}
 }

@@ -25,7 +25,8 @@ public class MigrateFles {
             uploadFileToRemoteServer(session, sftpChannel, localdirectory, desctinationDirectory);
         }
         catch (Exception ex){
-
+            log.error("Error Occured while  Connecting to SFP >>>"+ex.getMessage());
+          ex.printStackTrace();
         }
 
     }
@@ -60,11 +61,13 @@ public class MigrateFles {
         File localFile = new File(localFolder);
 
 
-        if (localFile.exists()) {
+        if (localFile.exists() ) {
+
             sftp.put(localFile.getAbsolutePath(), remoteFolder);
            log.info("Files Succefully Uploaded");
         } else {
             log.error("local folder \"" + localFile.getAbsolutePath() + "\" does not exist");
+
         }
     }
 

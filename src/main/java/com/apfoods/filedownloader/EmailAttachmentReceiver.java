@@ -3,8 +3,11 @@ package com.apfoods.filedownloader;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.zeroturnaround.zip.ZipUtil;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Properties;
@@ -15,7 +18,7 @@ import javax.mail.Session;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.search.FlagTerm;
 
-
+@Component
 public class EmailAttachmentReceiver {
     private String saveDirectory;
     @Value("${sftpusername}")
@@ -184,7 +187,10 @@ public class EmailAttachmentReceiver {
 
     public void zipFiles(String sourceFile,String zipFile) throws Exception{
         System.out.println("Inside zip file >>>>>>>>>>>");
-            ZipUtil.pack(new File(sourceFile), new File(zipFile));
+      if (new File(sourceFile).listFiles().length >0){
+          ZipUtil.pack(new File(sourceFile), new File(zipFile));
+      }
+
 
 
     }
@@ -206,16 +212,33 @@ public class EmailAttachmentReceiver {
 
        System.out.println(" sftpusername >>>>" +sftpusername);
          if (!f.exists()) {
-             System.out.println("tempDir does not exist >>>>" + tempDir);
+             System.out.println("tempDir does not exist >>>> create one " + tempDir);
              f.mkdir();
          }
          File z = new File(ziDir);
          if (!z.exists()) {
-             System.out.println("ziDir does not exist >>>>>>" + ziDir);
+             System.out.println("ziDir does not exist >>>>>>  create one " + ziDir);
              z.mkdir();
          }
 
-		System.out.println("host>>>>"+host);
+         Properties prop = new Properties();
+         InputStream input = null;
+
+         String homeDir = System.getenv("PETCOM_HOME");
+
+         input = new FileInputStream(homeDir+"/application.properties");
+         prop.load(input);
+
+         sftpusername= prop.getProperty("sftpusername");
+         sftpassword= prop.getProperty("sftpassword");
+         sftphost= prop.getProperty("sftphost");
+         remotedirectory= prop.getProperty("remotedirectory");
+         emailuserName= prop.getProperty("emailuserName");
+         port= prop.getProperty("port");
+         host= prop.getProperty("host");
+         password= prop.getProperty("password");
+
+         System.out.println("email host>>>>"+host);
 		System.out.println("port>>>>"+port);
 		System.out.println("userName>>>>"+emailuserName);
 		System.out.println("password>>>>"+password);

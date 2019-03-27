@@ -4,7 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.Properties;
 
 
 @Component
@@ -15,7 +18,9 @@ import java.text.SimpleDateFormat;
         private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
 
+
         @Scheduled(cron ="0 0 12 28 * ?")
+       //@Scheduled(cron ="0 0/5 * * * ?")
         public void reportCurrentTime() {
             EmailAttachmentReceiver m= new EmailAttachmentReceiver();
             try {

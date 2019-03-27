@@ -7,7 +7,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Configuration
-@PropertySource("classpath:application.properties")
+//@PropertySource("classpath:application.properties")
+@PropertySource("file:${PETCOM_HOME}/application.properties")
 public class Config {
     public String getSftpusername() {
         return sftpusername;
